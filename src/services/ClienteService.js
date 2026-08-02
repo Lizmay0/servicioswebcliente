@@ -1,35 +1,52 @@
-// Base de datos temporal en memoria (Simulación)
-let clientes = [
-    {
-        id: 1,
-        documento: "1098765432",
-        nombre: "Juan Pérez",
-        telefono: "3001234567"
-    },
-    {
-        id: 2,
-        documento: "1023456789",
-        nombre: "María Gómez",
-        telefono: "3109876543"
-    }
-];
+import pool from "../config/db.js";
 
-// Servicio: Obtener todos los clientes
-export const obtenerTodosLosClientes = () => {
-    return clientes;
+// Método GET para obtener todos los clientes
+export const obtenerTodosLosClientes = async () => {
+
+    try {
+
+        const [rows] = await pool.query("SELECT * FROM clientes");
+
+        return rows;
+
+    } catch (error) {
+
+        throw new Error(
+            "Error al obtener los clientes de la base de datos: " +
+            error.message
+        );
+
+    }
+
 };
 
-// Servicio: Crear un nuevo cliente
-export const crearCliente = (datosCliente) => {
+// Método POST para crear un nuevo cliente
+export const crearCliente = async (datosCliente) => {
 
-    const nuevoCliente = {
-        id: clientes.length + 1,
-        documento: datosCliente.documento,
-        nombre: datosCliente.nombre,
-        telefono: datosCliente.telefono
-    };
+    const { documento, nombre, telefono } = datosCliente;
 
-    clientes.push(nuevoCliente);
+    try {
 
-    return nuevoCliente;
+        const [result] = await pool.query(
+            "INSERT INTO clientes (documento, nombre, telefono) VALUES (?, ?, ?)",
+            [documento, nombre, telefono]
+        );
+
+        // Retornamos el registro recién creado
+        return {
+            id: result.insertId,
+            documento,
+            nombre,
+            telefono
+        };
+
+    } catch (error) {
+
+        throw new Error(
+            "Error al guardar el cliente: " +
+            error.message
+        );
+
+    }
+
 };
