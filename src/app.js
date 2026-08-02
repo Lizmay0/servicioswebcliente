@@ -6,7 +6,7 @@ const app = express();
 // Middleware traductor de JSON
 app.use(express.json());
 
-// Registro de las rutas (Los endpoints ahora tendrán el prefijo /api/clientes)
+// Registro de las rutas
 app.use("/api/clientes", clienteRoutes);
 
 export default app;

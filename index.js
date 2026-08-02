@@ -1,11 +1,11 @@
-import express from "express";
+import app from "./src/app.js";
 
-const app = express();
+// Leemos el puerto desde el archivo .env
+const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-    res.send("Servidor funcionando");
-});
+// Inicia el servidor y escucha en el puerto definido
+app.listen(PORT, () => {
 
-app.listen(3000, () => {
-    console.log("Servidor corriendo en http://localhost:3000");
+    console.log(`Servidor de clientes corriendo en http://localhost:${PORT}`);
+
 });
